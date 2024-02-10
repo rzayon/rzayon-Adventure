@@ -15,7 +15,7 @@ def levelCheck(player):
 
     firstUpgrade = True
     newLevel = player.stats[5]
-    levels = {2: 50, 3: 125, 4: 250, 5: 400, 6: 650, 7: 800, 8: 1000, 9: 1250, 10: 1700, 11: 2000, 12: 2500, 13: 3200, 14: 4000, 15: 4600, 16: 5250}
+    global levels
     ameliorationInfo = {"pv": 0, "att": 1, "déf": 2, "ps": 3}
     choixAmelioration = False
 
@@ -83,3 +83,6 @@ def ameliorationStat(player, indiceStat):
 
     audioEngine.sfxPlay("ressources/sfx/levelUpSfx.ogg", 2)
     print(changeStatsLog)
+
+
+levels = {2: 50, 3: 125, 4: 250, 5: 400, 6: 650, 7: 800, 8: 1000, 9: 1250, 10: 1700, 11: 2000, 12: 2500, 13: 3200, 14: 4000, 15: 4600, 16: 5250}

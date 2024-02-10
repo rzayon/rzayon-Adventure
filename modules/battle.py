@@ -1,10 +1,8 @@
 import random
 import time
-import sys
 import keyboard
 
 import audioEngine
-import saveSystem
 import parametres
 import menus
 import tutoriel
@@ -79,6 +77,7 @@ def fight(player, musicBattle):
 
         if misc.estMort(player) == True:
             audioEngine.musicStop()
+            audioEngine.sfxStop(3)
             audioEngine.sfxPlay("ressources/sfx/death.ogg", 2)
 
             print("...")
