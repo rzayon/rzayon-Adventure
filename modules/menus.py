@@ -7,6 +7,7 @@ import audioEngine
 import saveSystem
 import parametres
 import map
+import levelXP
 import misc
 
 #Title Screen
@@ -201,7 +202,8 @@ def profile(player):
     while quitTrigger == False:
 
         print(f"\n{parametres.affichePseudoCouleur(player)}\n\n"
-              f"Level {player.stats[5]} | EXP: {player.stats[4]}\n\n"
+              f"Level {player.stats[5]} | EXP: {player.stats[4]}\n"
+              f"\033[1;1mProchain niveau dans: \033[1;33m{levelXP.levels[player.stats[5] + 1] - player.stats[4]}\033[0m \033[1;1mEXP\033[0m\n\n"
               f"Vie: {player.stats[0]}/{str(player.statsMax[0])}\n"
               f"Attaque: {player.stats[1]}\n"
               f"Défense: {player.stats[2]}\n"
