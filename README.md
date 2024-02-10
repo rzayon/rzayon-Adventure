@@ -4,4 +4,4 @@ I'm making it little by little even if it's bad (my code is atrocious btw)
 
 idk if it works with anything else than pycharm, probably yeah !
 
-![back to grind](https://github.com/rzayon/rzayon-Adventure/assets/116463984/6a3af457-3a4e-487b-95eb-e94ad60e8e6e)
+![back to grind](https://github.com/rzayon/rzayon-Adventure/assets/116463984/e340b319-29b5-4290-9d00-c20e88a7ef57)
