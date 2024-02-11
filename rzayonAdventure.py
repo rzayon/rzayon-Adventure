@@ -9,7 +9,7 @@ from modules import menus
 class Game:
 
     def __init__(self):
-        self.gameVersion = "0.601"
+        self.gameVersion = "0.602"
 
         self.nom = ""
         self.map = []
