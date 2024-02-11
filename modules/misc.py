@@ -32,9 +32,9 @@ def verifStats(player):
         player.stats[3] = 0
 
 def checkLifeWarning(player):
-    if 2 < player.stats[0] < 7:
+    if 2 < player.stats[0] <= 7:
         return f"\033[1;33m{player.stats[0]}\033[0m"
-    elif player.stats[0] < 2:
+    elif player.stats[0] <= 2:
         return f"\033[1;31m⚠️ {player.stats[0]}\033[0m"
     else:
         return player.stats[0]

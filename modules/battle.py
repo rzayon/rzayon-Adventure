@@ -1,5 +1,6 @@
 import random
 import time
+import sys
 import keyboard
 
 import audioEngine
@@ -28,11 +29,11 @@ def fight(player, musicBattle):
 
         while fightActionDone == False:
             lowHpDetect(player)
-            attaqueTrigger = input("\033[1;31mAttaquer (Att)\033[0m / \033[1;32mObjets (Obj)\033[0m / \033[1;33mSpécial (Spé) [WIP]\033[0m / \033[1;36mFuir \033[0m").capitalize()
+            attaqueTrigger = input("\033[1;31mAttaquer (Att)\033[0m / \033[1;32mObjets (Obj)\033[0m / \033[1;33mSpécial (Spé) [WIP]\033[0m / \033[1;36mFuir\033[0m / \033[37mNe rien faire (Rien)\033[0m ").capitalize()
 
-            while attaqueTrigger != "Att" and attaqueTrigger != "Obj" and attaqueTrigger != "Spé" and attaqueTrigger != "Fuir":
+            while attaqueTrigger != "Att" and attaqueTrigger != "Obj" and attaqueTrigger != "Spé" and attaqueTrigger != "Fuir" and attaqueTrigger != "Rien":
                 audioEngine.sfxPlay("ressources/sfx/wrongChoice.ogg", 2)
-                attaqueTrigger = input("\033[1;31m\033[1;1mAttaquer (Att)\033[0m / \033[1;32mObjets (Obj)\033[0m / \033[1;33mSpécial (Spé) [WIP]\033[0m / \033[1;36mFuir \033[0m").capitalize()
+                attaqueTrigger = input("\033[1;31mAttaquer (Att)\033[0m / \033[1;32mObjets (Obj)\033[0m / \033[1;33mSpécial (Spé) [WIP]\033[0m / \033[1;36mFuir\033[0m / \033[37mNe rien faire (Rien)\033[0m ").capitalize()
 
             if attaqueTrigger == "Att":
                 audioEngine.sfxStop(3)
@@ -68,6 +69,14 @@ def fight(player, musicBattle):
                 if fuir() == True:
                     return False
 
+            elif attaqueTrigger == "Rien":
+                audioEngine.sfxStop(3)
+                fightActionDone = True
+                audioEngine.sfxPlay("ressources/sfx/selectOption.ogg", 1)
+                rien()
+
+                time.sleep(1)
+
         etatsEffets.detectEtat(player)
 
         if player.statsEnnemi[0] > 0:
@@ -76,8 +85,8 @@ def fight(player, musicBattle):
             time.sleep(2.5)
 
         if misc.estMort(player) == True:
-            audioEngine.musicStop()
             audioEngine.sfxStop(3)
+            audioEngine.musicStop()
             audioEngine.sfxPlay("ressources/sfx/death.ogg", 2)
 
             print("...")
@@ -194,6 +203,16 @@ def fuir():
         print("\nVous avez trébucher, vous êtes toujours dans le combat.\n")
         time.sleep(2)
         return False
+
+def rien():
+    print()
+    for point in range(0, 4):
+        print("\033[3mVous attendez patiement" + ("." * point) + "\033[0m", end="")
+        time.sleep(0.6)
+        if point != 3:
+            sys.stdout.write("\r")
+
+    print("\n")
 
 # Ennemi action(s ?)
 def ennemiAttaque(player):
