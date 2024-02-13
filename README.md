@@ -4,7 +4,7 @@ started on the 14th january 2024
 a little RPG game that i made in terminal python (in french). It's VERY inspired by paper mario and mario luigi RPGs (almost all songs/sfx are from theses games).
 I'm making it little by little even if it's bad (my code is atrocious btw)
 
-idk if it works with anything else than pycharm, but probably yeah !
+idk if it works with anything else than pycharm, but probably yeah ! (need to have a special thing on the IDE i think to run it)
 
 (need to pip install keyboard in order to get the game working)
 
