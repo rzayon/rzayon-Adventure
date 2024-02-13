@@ -9,7 +9,7 @@ from modules import menus
 class Game:
 
     def __init__(self):
-        self.gameVersion = "0.602"
+        self.gameVersion = "0.603"
 
         self.nom = ""
         self.map = []
@@ -20,6 +20,7 @@ class Game:
         self.stats = [1, 1, 1, 1, 0, 1]
         self.statsName = ["PV", "Attaque", "Défense", "PS", "EXP", "Level"]
         self.etats = {}
+        self.tourEtage = 1
 
         # Vie Max[0], PS Max[1]
         self.statsMax = []
