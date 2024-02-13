@@ -111,8 +111,8 @@ def mainMenu(player):
 
 def nouvellePartie(player):
     player.nom = "Player"
-    player.stats = [20, 12, 10, 10, 0, 1]
-    player.statsMax = [20, 10]
+    player.stats = [25, 12, 10, 10, 0, 1]
+    player.statsMax = [25, 10]
     player.objets = {}
     player.map = []
 
