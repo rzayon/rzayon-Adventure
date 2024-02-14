@@ -18,7 +18,7 @@ def titleScreen(player, trigger):
 
     if trigger == False:
         time.sleep(1.2)
-        print("\t\033[1;33m  \033[4mrzayon's Adventure\033[0m")
+        print(f"\t  {player.gameName}")
         time.sleep(2)
         print("\n\t\033[4mAppuyez pour commencer\033[0m\n\t\t  "
               "\033[1;1mbeta", player.gameVersion + "\033[0m")
@@ -28,7 +28,7 @@ def titleScreen(player, trigger):
 
     else:
         time.sleep(1.2)
-        print("\n\t\033[1;33m  \033[4mrzayon's Adventure\033[0m\n\n"
+        print(f"\n\t  {player.gameName}\n\n"
               "\t\033[4mAppuyez pour commencer\033[0m"
               "\n\t\t  \033[1;1mbeta", player.gameVersion + "\033[0m")
         keyboard.read_event(suppress = True)
@@ -43,7 +43,7 @@ def mainMenu(player):
 
     audioEngine.musicPlay("ressources/mainMenu.mp3")
 
-    print("\n\t\033[1;33m  \033[4mrzayon's Adventure\033[0m\n\n"
+    print(f"\n\t  {player.gameName}\n\n"
           "\t  \033[4mNouvelle Partie (N)\033[0m\n" +
 
          ("\t     \033[4m\033[37mContinuer (C)\033[0m\n"

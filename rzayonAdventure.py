@@ -9,6 +9,7 @@ from modules import menus
 class Game:
 
     def __init__(self):
+        self.gameName = "\033[1;33m\033[4mrzayon's Adventure\033[0m"
         self.gameVersion = "0.603"
 
         self.nom = ""
