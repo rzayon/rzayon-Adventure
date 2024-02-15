@@ -2,8 +2,6 @@ import sys
 sys.dont_write_bytecode = True
 
 from modules import menus
-from modules import map
-from modules import battle
 
 class Game:
 
@@ -35,7 +33,4 @@ class Game:
         self.tutorial_triggers = {"fightFirstTime": True, "mapFirstTime": True, "shopFirstTime": True}
 
 player = Game()
-menus.new_game(player)
-while True:
-    map.game_start(player)
 menus.title_screen(player, False)
