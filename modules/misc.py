@@ -1,3 +1,6 @@
+""" Module contenant des fonctions et variables utiles pour le jeu. """
+
+
 import os
 import time
 import sys

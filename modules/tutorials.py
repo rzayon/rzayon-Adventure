@@ -1,3 +1,6 @@
+""" Module gérant tous les tutoriels du jeu et leur déclenchement. """
+
+
 import random
 import time
 import keyboard

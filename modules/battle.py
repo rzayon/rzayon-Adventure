@@ -1,3 +1,5 @@
+""" Module de combat du jeu. """
+
 import random
 import time
 import sys

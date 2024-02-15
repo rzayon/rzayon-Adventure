@@ -1,3 +1,6 @@
+""" Module pour les effets de statut (états) des personnages. """
+
+
 import random
 import time
 

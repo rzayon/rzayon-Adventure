@@ -1,3 +1,6 @@
+""" Module de gestion des paramètres du joueur. """
+
+
 import time
 
 from engines import audio_engine
