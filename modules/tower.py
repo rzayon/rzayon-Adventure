@@ -1,42 +1,43 @@
 import time
 
-import audioEngine
-import battle
-import misc
+from engines import audio_engine
+
+from modules import battle
+from modules import misc
 
 def tower(player):
     entrer = input("Vous êtes arrivé a une tour. Voulez vous y entrer ? (O/N) ").upper()
     while entrer != "O" and entrer != "N":
-        audioEngine.sfxPlay("ressources/sfx/wrongChoice.ogg", 2)
+        audio_engine.sfx_play("ressources/sfx/wrongChoice.ogg", 2)
         entrer = input("Réponse incorrecte. Voulez vous entrer dans la tour ? (O/N) ").upper()
 
-    if player.tourEtage <= 0:
-        player.tourEtage = 1
+    if player.tower_floor <= 0:
+        player.tower_floor = 1
 
     if entrer == "O":
-        audioEngine.sfxPlay("ressources/sfx/selectOption.ogg", 2)
-        misc.transitionMenu(1.5)
-        while player.tourEtage < 11:
+        audio_engine.sfx_play("ressources/sfx/selectOption.ogg", 2)
+        misc.menu_transition(1.5)
+        while player.tower_floor < 11:
             time.sleep(0.5)
-            chooseTowerBoss(player, player.tourEtage)
-            audioEngine.sfxPlay("ressources/sfx/bossStart.ogg", 4)
+            choose_tower_boss(player, player.tower_floor)
+            audio_engine.sfx_play("ressources/sfx/bossStart.ogg", 4)
             time.sleep(2)
 
-            print(f"\033[1;31mVS {player.statsEnnemi[4]}\033[0m !")
+            print(f"\033[1;31mVS {player.stats_enemy[4]}\033[0m !")
 
-            audioEngine.sfxPlay("ressources/sfx/bossStartRideau.ogg", 2)
+            audio_engine.sfx_play("ressources/sfx/bossStartRideau.ogg", 2)
             time.sleep(1.5)
 
-            if battle.fight(player, f"ressources/mboss{player.tourEtage}.mp3") == True:
-                player.tourEtage += 1
+            if battle.fight(player, f"ressources/mboss{player.tower_floor}.mp3") == True:
+                player.tower_floor += 1
             else:
                 return False
 
-            if player.tourEtage == 11:
+            if player.tower_floor == 11:
                 print("Bravo ! Vous avez éléminé les monstres de la tour !")
                 return True
 
-def chooseTowerBoss(player, currentEtage):
+def choose_tower_boss(player, currentEtage):
     listeBoss = {1: [40, 15, 15, True, "\033[1;31mLithorok\033[0m"],
                  2: [65, 20, 25, True, "\033[1;31mHinox\033[0m"],
                  3: [85, 35, 30, True, "\033[1;31mFury Bowser\033[0m"],
@@ -50,5 +51,5 @@ def chooseTowerBoss(player, currentEtage):
 
     for boss in listeBoss.keys():
         if boss == currentEtage:
-            player.statsEnnemi = listeBoss[boss]
+            player.stats_enemy = listeBoss[boss]
             print(f"\n\033[1;1mVous êtes a l'étage {currentEtage}.\033[0m")

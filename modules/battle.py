@@ -3,128 +3,119 @@ import time
 import sys
 import keyboard
 
-import audioEngine
-import parametres
-import menus
-import tutoriel
-import levelXP
-import etatsEffets
-import misc
+from engines import audio_engine
+
+from modules import settings
+from modules import menus
+from modules import tutorials
+from modules import objects
+from modules import level_xp
+from modules import states_effects
+from modules import misc
 
 def fight(player, musicBattle):
 
-    audioEngine.musicPlay(musicBattle)
-
-    vieEnnemiTempo = player.statsEnnemi[0]
+    vieEnnemiTempo = player.stats_enemy[0]
 
     print()
 
-    while player.stats[0] > 0 and player.statsEnnemi[0] > 0:
-        print(f"{parametres.affichePseudoCouleur(player)}\n{misc.checkLifeWarning(player)} \033[1;95mPV\033[0m | {player.stats[3]} \033[1;33mPS\033[0m\n" +
-              (etatsEffets.afficheEffets(player.etats) if etatsEffets.afficheEffets(player.etats) != False else ""))
-        print("\033[1;1mVS\033[0m\n")
-        print(f"\033[37m{player.statsEnnemi[4]}\033[0m" + (etatsEffets.afficheEffets(player.etatsEnnemi) if etatsEffets.afficheEffets(player.etatsEnnemi) != False else " ") + f"\n\033[1;95mPV:\033[0m {player.statsEnnemi[0]}\n\033[1;31mAtt:\033[0m {player.statsEnnemi[1]}\n")
+    while player.stats[0] > 0 and player.stats_enemy[0] > 0:
 
         fightActionDone = False
 
         while fightActionDone == False:
-            lowHpDetect(player)
-            attaqueTrigger = input("\033[1;31mAttaquer (Att)\033[0m / \033[1;32mObjets (Obj)\033[0m / \033[1;33mSpécial (Spé) [WIP]\033[0m / \033[1;36mFuir\033[0m / \033[37mNe rien faire (Rien)\033[0m ").capitalize()
+            audio_engine.music_play(musicBattle)
+            print(f"{settings.display_name_color(player)}\n{misc.check_life_warning(player)} \033[1;95mPV\033[0m | {player.stats[3]} \033[1;33mPS\033[0m\n" +
+                (states_effects.display_effects(player.states) if states_effects.display_effects(player.states) != False else ""))
+            print("\033[1;1mVS\033[0m\n")
+            print(f"\033[37m{player.stats_enemy[4]}\033[0m" + (states_effects.display_effects(player.states_enemy) if states_effects.display_effects(player.states_enemy) != False else " ") + f"\n\033[1;95mPV:\033[0m {player.stats_enemy[0]}\n\033[1;31mAtt:\033[0m {player.stats_enemy[1]}\n")
 
-            while attaqueTrigger != "Att" and attaqueTrigger != "Obj" and attaqueTrigger != "Spé" and attaqueTrigger != "Fuir" and attaqueTrigger != "Rien":
-                audioEngine.sfxPlay("ressources/sfx/wrongChoice.ogg", 2)
-                attaqueTrigger = input("\033[1;31mAttaquer (Att)\033[0m / \033[1;32mObjets (Obj)\033[0m / \033[1;33mSpécial (Spé) [WIP]\033[0m / \033[1;36mFuir\033[0m / \033[37mNe rien faire (Rien)\033[0m ").capitalize()
+            low_hp_detect(player)
+            attaqueTrigger = input("\033[1;31mAttaquer (A)\033[0m / \033[1;32mObjets (O)\033[0m / \033[1;33mSpécial (S) [WIP]\033[0m / \033[1;36mFuir (F)\033[0m / \033[37mNe rien faire (R)\033[0m ").upper()
 
-            if attaqueTrigger == "Att":
-                audioEngine.sfxStop(3)
-                audioEngine.sfxPlay("ressources/sfx/selectOption.ogg", 1)
+            while attaqueTrigger != "A" and attaqueTrigger != "O" and attaqueTrigger != "S" and attaqueTrigger != "F" and attaqueTrigger != "R":
+                audio_engine.sfx_play("ressources/sfx/wrongChoice.ogg", 2)
+                attaqueTrigger = input("\033[1;31mAttaquer (A)\033[0m / \033[1;32mObjets (O)\033[0m / \033[1;33mSpécial (S) [WIP]\033[0m / \033[1;36mFuir (F)\033[0m / \033[37mNe rien faire (R)\033[0m ").upper()
 
-                if tutoriel.fightTuto(player) == True:
-                    tutoriel.fightTuto(player)
+            if attaqueTrigger == "A":
+                audio_engine.sfx_stop(3)
+                audio_engine.sfx_play("ressources/sfx/selectOption.ogg", 1)
 
-                    audioEngine.musicPlay(musicBattle)
-                    attaqueRandom = int((player.stats[1] - player.statsEnnemi[2]) * random.uniform(1.5, 1.9))
-                    player.statsEnnemi[0] -= attaqueRandom
+                if tutorials.fight_tutorial(player) == True:
+                    tutorials.fight_tutorial(player)
+
+                    audio_engine.music_play(musicBattle)
+                    attaqueRandom = int((player.stats[1] - player.stats_enemy[2]) * random.uniform(1.5, 1.9))
+                    player.stats_enemy[0] -= attaqueRandom
                     print(f"\nVous avez mis \033[1;31m{attaqueRandom}\033[0m de dégats à l'ennemi.")
 
                 else:
-                    print(f"\nVous avez mis \033[1;31m{playerAttaque(player)}\033[0m de dégats à l'ennemi.")
+                    print(f"\nVous avez mis \033[1;31m{player_attaque(player)}\033[0m de dégats à l'ennemi.")
 
                 time.sleep(2)
                 fightActionDone = True
 
-            elif attaqueTrigger == "Obj":
-                audioEngine.sfxPlay("ressources/sfx/selectOption.ogg", 1)
-                player.stats[0] += 10
-                if objets(player) == True:
+            elif attaqueTrigger == "O":
+                audio_engine.sfx_play("ressources/sfx/selectOption.ogg", 1)
+                if menus.objects_menu(player, True) == True:
+                    fightActionDone = True
+                    time.sleep(2)
+                else:
+                    print()
+
+            elif attaqueTrigger == "S":
+                audio_engine.sfx_play("ressources/sfx/selectOption.ogg", 1)
+                if special_attack(player) == True:
                     fightActionDone = True
 
-            elif attaqueTrigger == "Spé":
-                audioEngine.sfxPlay("ressources/sfx/selectOption.ogg", 1)
-                if attaqueSpe(player) == True:
-                    fightActionDone = True
-
-            elif attaqueTrigger == "Fuir":
+            elif attaqueTrigger == "F":
                 fightActionDone = True
-                if fuir() == True:
+                if flee() == True:
                     return False
 
-            elif attaqueTrigger == "Rien":
-                audioEngine.sfxStop(3)
+            elif attaqueTrigger == "R":
+                audio_engine.sfx_stop(3)
                 fightActionDone = True
-                audioEngine.sfxPlay("ressources/sfx/selectOption.ogg", 1)
-                rien()
+                audio_engine.sfx_play("ressources/sfx/selectOption.ogg", 1)
+                nothing()
 
                 time.sleep(1)
 
-        etatsEffets.detectEtat(player)
+        states_effects.detect_state(player)
 
-        if player.statsEnnemi[0] > 0:
-            print(f"{player.statsEnnemi[4]} vous a mis \033[1;31m{ennemiAttaque(player)}\033[0m de dégats.\n")
-            audioEngine.sfxPlay("ressources/sfx/damageToPlayer.ogg", 1)
+        if player.stats_enemy[0] > 0:
+            print(f"{player.stats_enemy[4]} vous a mis \033[1;31m{enemy_attack(player)}\033[0m de dégats.\n")
+            audio_engine.sfx_play("ressources/sfx/damageToPlayer.ogg", 1)
             time.sleep(2.5)
 
-        if misc.estMort(player) == True:
-            audioEngine.sfxStop(3)
-            audioEngine.musicStop()
-            audioEngine.sfxPlay("ressources/sfx/death.ogg", 2)
+        if misc.is_dead(player) == True:
+            player_death(player)
 
-            print("...")
-            time.sleep(1.5)
-
-            print("💀💀💀")
-            time.sleep(1.5)
-
-            audioEngine.sfxPlay("ressources/gameOver.mp3", 2)
-            print("\n\033[1;31mGAME OVER !\033[0m")
-            time.sleep(6)
-            menus.gameOverChoice(player)
-
-    if player.statsEnnemi[0] <= 0:
-        finCombat(player, vieEnnemiTempo)
+    if player.stats_enemy[0] <= 0:
+        fight_end(player, vieEnnemiTempo)
         return True
 
-def lowHpDetect(player):
+def low_hp_detect(player):
     if 2 < player.stats[0] <= 7:
-        audioEngine.sfxPlayLoop("ressources/sfx/lowHP.ogg", 3)
+        audio_engine.sfx_play_loop("ressources/sfx/lowHP.ogg", 3)
     elif player.stats[0] <= 2:
-        audioEngine.sfxPlayLoop("ressources/sfx/veryLowHP.ogg", 3)
+        audio_engine.sfx_play_loop("ressources/sfx/veryLowHP.ogg", 3)
     else:
-        audioEngine.sfxStop(3)
+        audio_engine.sfx_stop(3)
 
 # Action Player
 
-def playerAttaque(player):
+def player_attaque(player):
     time.sleep(0.5)
-    attaqueCharge = prepareAttaque()
+    attaqueCharge = prepare_attaque()
 
     if attaqueCharge:
-        attaqueRandom = int((player.stats[1] - player.statsEnnemi[2]) * random.uniform(1.45, 1.75))
+        attaqueRandom = int((player.stats[1] - player.stats_enemy[2]) * random.uniform(1.45, 1.75))
         if attaqueRandom <= 0:
             attaqueRandom = random.randint(2, player.stats[1] - 1)
 
     elif attaqueCharge == False:
-        attaqueRandom = int((player.stats[1] - player.statsEnnemi[2]) * random.uniform(1.1, 1.3))
+        attaqueRandom = int((player.stats[1] - player.stats_enemy[2]) * random.uniform(1.1, 1.3))
         if attaqueRandom <= 0:
             attaqueRandom = random.randint(2, player.stats[1] - 1)
 
@@ -132,37 +123,37 @@ def playerAttaque(player):
         attaqueRandom = int((player.stats[1] * 0.15 * random.uniform(1.05, 1.1)))
         print("\033[3m\nraté...\033[0m")
 
-    player.statsEnnemi[0] -= attaqueRandom
+    player.stats_enemy[0] -= attaqueRandom
     return attaqueRandom
 
-def prepareAttaque():
+def prepare_attaque():
     print()
 
     for i in reversed(range(3)):
         timer = time.time()
-        audioEngine.sfxPlay("ressources/sfx/prepareAttack.ogg", 4)
+        audio_engine.sfx_play("ressources/sfx/prepareAttack.ogg", 4)
         print(i + 1)
         while time.time() - timer < 0.5:
             if keyboard.is_pressed("space"):
                 return None
 
     timer = time.time()
-    audioEngine.sfxPlay("ressources/sfx/attaqueGo.ogg", 4)
+    audio_engine.sfx_play("ressources/sfx/attaqueGo.ogg", 4)
     print("\n\033[1;32m\033[1;1mGO !\033[0m")
 
     while True:
         if keyboard.is_pressed("space"):
-            audioEngine.sfxPlay("ressources/sfx/attaqueBien.ogg", 2)
+            audio_engine.sfx_play("ressources/sfx/attaqueBien.ogg", 2)
             print("\033[1;1m\033[1;33m\nBien !")
             time.sleep(0.5)
-            audioEngine.sfxPlay("ressources/sfx/attaqueGo.ogg", 4)
+            audio_engine.sfx_play("ressources/sfx/attaqueGo.ogg", 4)
             print("\n\033[1;32m\033[1;1mGO !\033[0m")
             timer = time.time()
 
             while True:
                 if keyboard.is_pressed("space"):
-                    audioEngine.sfxPlay("ressources/sfx/attaqueSuccess.ogg", 1)
-                    print(f"\033[1;1m\n{misc.rainbowText('Excellent !')}")
+                    audio_engine.sfx_play("ressources/sfx/attaqueSuccess.ogg", 1)
+                    print(f"\033[1;1m\n{misc.rainbow_text('Excellent !')}")
                     return True
 
                 if time.time() - timer > 0.65:
@@ -171,40 +162,24 @@ def prepareAttaque():
         if time.time() - timer > 1.10:
             return None
 
-def objets(player):
-    '''print("Voici vos objets:")
-    if player.objets == []:
-        print("\033[3mVide.\033[0m\n")
-    else:
-        print(*player.objets, sep=", ")
-        objetUtiliser = int(input("Quel objet voulez vous utiliser ? "))
-        while objetUtiliser > len(player.objets) or objetUtiliser <= 0:
-            objetUtiliser = int(input("Le choix est invalide. Quel objet voulez vous utiliser ? "))
-        objetChoix = objetUtiliser
-        objetUtiliser = player.objets[objetUtiliser - 1]
-        player.objet(objetUtiliser, player.statsEnnemi)
-        player.objets.pop(objetChoix - 1)'''
-    print("disable """"""""temporairement""""""""")
-    time.sleep(3)
-
-def attaqueSpe(player):
+def special_attack(player):
     print("wip (pour combien de temps, ca jsp du tout jpp)")
     time.sleep(4)
 
-def fuir():
+def flee():
     if random.random() > 0.25:
-        audioEngine.sfxPlay("ressources/sfx/leaveBattle.ogg", 2)
+        audio_engine.sfx_play("ressources/sfx/leaveBattle.ogg", 2)
         print("\n\033[3mVous avez fuis...\033[0m")
-        audioEngine.sfxStop(3)
-        misc.transitionMenu(3)
+        audio_engine.sfx_stop(3)
+        misc.menu_transition(3)
         return True
     else:
-        audioEngine.sfxPlay("ressources/sfx/trebucher.ogg", 2)
+        audio_engine.sfx_play("ressources/sfx/trebucher.ogg", 2)
         print("\nVous avez trébucher, vous êtes toujours dans le combat.\n")
         time.sleep(2)
         return False
 
-def rien():
+def nothing():
     print()
     for point in range(0, 4):
         print("\033[3mVous attendez patiement" + ("." * point) + "\033[0m", end="")
@@ -215,28 +190,60 @@ def rien():
     print("\n")
 
 # Ennemi action(s ?)
-def ennemiAttaque(player):
-    attaqueEnnemi = int(player.statsEnnemi[1] * random.uniform(1.1, 1.2) - player.stats[2] / 2)
+def enemy_attack(player):
+    attaqueEnnemi = int(player.stats_enemy[1] * random.uniform(1.1, 1.2) - player.stats[2] / 2)
 
     if attaqueEnnemi <= 0:
-        attaqueEnnemi = random.randint(4, player.statsEnnemi[1] - 1)
+        attaqueEnnemi = random.randint(4, player.stats_enemy[1] - 1)
 
-    player.stats[0] -= attaqueEnnemi
-    misc.verifStats(player)
+    player.stats[0] -= 90
+    #player.stats[0] -= attaqueEnnemi
+    misc.check_stats(player)
     return attaqueEnnemi
 
-# Combat fin GG
-def finCombat(player, vieEnnemiTempo):
-    audioEngine.sfxStop(3)
-    audioEngine.musicStop()
+# Combat fin GG...ou pas ?
+def fight_end(player, vieEnnemiTempo):
+    audio_engine.sfx_stop(3)
+    audio_engine.music_stop()
 
-    audioEngine.sfxPlay("ressources/victoryBattle.mp3", 1)
+    audio_engine.sfx_play("ressources/victoryBattle.mp3", 1)
 
-    expGagner = levelXP.exp(player, vieEnnemiTempo)
-    print(f"{player.statsEnnemi[4]} vaincu! Vous avez gagné \033[1;32m{expGagner} points d'expérience.\033[0m\n")
+    expGagner = level_xp.exp(player, vieEnnemiTempo)
+    print(f"{player.stats_enemy[4]} vaincu! Vous avez gagné \033[1;32m{expGagner} points d'expérience.\033[0m\n")
 
     time.sleep(1.5)
-    audioEngine.sfxPlay("ressources/sfx/battleWinClap.ogg", 2)
+    audio_engine.sfx_play("ressources/sfx/battleWinClap.ogg", 2)
     time.sleep(2)
-    levelXP.levelCheck(player)
-    etatsEffets.resetEtats(player)
+    level_xp.check_level(player)
+    states_effects.reset_state(player)
+
+
+def player_death(player):
+    checkMort = objects.totem_regen(player)
+    if checkMort != False:
+        audio_engine.sfx_stop(3)
+        audio_engine.music_stop()
+        audio_engine.sfx_play("ressources/sfx/death.ogg", 2)
+
+        print("...")
+        time.sleep(1.45)
+
+        audio_engine.sfx_play("ressources/sfx/fullRegen.ogg", 2)
+        print(f"Le \033[1;32m{checkMort}\033[0m vous a sauvé !\n")
+        time.sleep(2)
+        return False
+    else:
+        audio_engine.sfx_stop(3)
+        audio_engine.music_stop()
+        audio_engine.sfx_play("ressources/sfx/death.ogg", 2)
+
+        print("...")
+        time.sleep(1.5)
+
+        print("💀💀💀")
+        time.sleep(1.5)
+
+        audio_engine.sfx_play("ressources/gameOver.mp3", 2)
+        print("\n\033[1;31mGAME OVER !\033[0m")
+        time.sleep(6)
+        menus.game_over_menu(player)

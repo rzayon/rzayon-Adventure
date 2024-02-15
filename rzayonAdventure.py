@@ -1,38 +1,41 @@
 import sys
 sys.dont_write_bytecode = True
 
-sys.path.insert(1, 'engines/')
-sys.path.insert(2, 'modules/')
-
 from modules import menus
+from modules import map
+from modules import battle
 
 class Game:
 
     def __init__(self):
-        self.gameName = "\033[1;33m\033[4mrzayon's Adventure\033[0m"
-        self.gameVersion = "0.603"
+        self.game_name = "\033[1;33m\033[4mrzayon's Adventure\033[0m"
+        self.game_version = "0.607"
 
-        self.nom = ""
+        self.player_name = ""
         self.map = []
-        self.deplacementHauteur = 0
-        self.objets = {}
+        self.y_movement = 0
+        self.objects = {}
 
         # Vie[0] Attaque[1], Défense[2], PS[3], EXP[4], Level[5]
         self.stats = [1, 1, 1, 1, 0, 1]
-        self.statsName = ["PV", "Attaque", "Défense", "PS", "EXP", "Level"]
-        self.etats = {}
-        self.tourEtage = 1
+        self.stats_name = ["PV", "Attaque", "Défense", "PS", "EXP", "Level"]
+        self.stats_boost = [0, 0]
+        self.states = {}
+        self.tower_floor = 1
 
         # Vie Max[0], PS Max[1]
-        self.statsMax = []
+        self.stats_max = []
 
         # Vie[0] Attaque[1] Défense[2] Affecter Par les effets[3] Nom[4]
-        self.statsEnnemi = [5, 5, 5, False, "D"]
-        self.etatsEnnemi = {}
+        self.stats_enemy = [5, 5, 5, False, "D"]
+        self.states_enemy = {}
 
-        self.parametres = {"Auto-save": "Activé",
-                           "Couleur du pseudo": ["\033[1;34m", "Bleu"]}
-        self.tutorielDone = {"fightFirstTime": True, "mapFirstTime": True}
+        self.settings = {"Auto-save": "Activé",
+                         "Couleur du pseudo": ["\033[1;34m", "Bleu"]}
+        self.tutorial_triggers = {"fightFirstTime": True, "mapFirstTime": True, "shopFirstTime": True}
 
 player = Game()
-menus.titleScreen(player, False)
+menus.new_game(player)
+while True:
+    map.game_start(player)
+menus.title_screen(player, False)

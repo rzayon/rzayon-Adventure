@@ -1,17 +1,17 @@
 import time
 import keyboard
 
-import audioEngine
+from engines import audio_engine
 
-import menus
-import parametres
-import saveSystem
-import tutoriel
-import battle
-import tower
-import misc
+from modules import menus
+from modules import settings
+from modules import save_system
+from modules import tutorials
+from modules import battle
+from modules import tower
+from modules import misc
 
-def afficheMap(map):
+def display_map(map):
     mapAffichage = []
 
     for element in map:
@@ -26,18 +26,22 @@ def afficheMap(map):
             mapAffichage.append("\033[1;1m[M]\033[0m")
         elif element == "[R]":
             mapAffichage.append("\033[1;35m[R]\033[0m")
+        elif element == "[S]":
+            mapAffichage.append("\033[1;95m[S]\033[0m")
+        elif element == "[?]":
+            mapAffichage.append("\033[37m[?]\033[0m")
         else:
             mapAffichage.append(element)
 
     print(*mapAffichage)
     print()
 
-def partie(player):
-    tutoriel.mapTuto(player)
+def game_start(player):
+    tutorials.map_tutorial(player)
 
-    audioEngine.musicPlay("ressources/map.mp3")
+    audio_engine.music_play("ressources/map.mp3")
 
-    afficheMap(player.map)
+    display_map(player.map)
 
     positionPlayer = player.map.index('[J]')
 
@@ -48,52 +52,52 @@ def partie(player):
     if action == "G":
         caseDetecteur = positionPlayer - 1
         if collision(player, caseDetecteur) == True:
-            deplacer(player, positionPlayer, - 1)
+            move(player, positionPlayer, - 1)
 
     elif action == "D":
         caseDetecteur = positionPlayer + 1
         if collision(player, caseDetecteur) == True:
-            deplacer(player, positionPlayer, 1)
+            move(player, positionPlayer, 1)
 
     elif action == "H":
-        caseDetecteur = positionPlayer - player.deplacementHauteur
+        caseDetecteur = positionPlayer - player.y_movement
         if caseDetecteur > 0:
             if collision(player, caseDetecteur) == True:
-                deplacer(player, positionPlayer, - player.deplacementHauteur)
+                move(player, positionPlayer, - player.y_movement)
 
     elif action == "B":
-        caseDetecteur = positionPlayer + player.deplacementHauteur
+        caseDetecteur = positionPlayer + player.y_movement
         if caseDetecteur < len(player.map):
             if collision(player, caseDetecteur) == True:
-                deplacer(player, positionPlayer, player.deplacementHauteur)
+                move(player, positionPlayer, player.y_movement)
 
     elif action == "L":
-        audioEngine.sfxPlay("ressources/sfx/selectOption.ogg", 1)
-        legende()
+        audio_engine.sfx_play("ressources/sfx/selectOption.ogg", 1)
+        legend()
 
     elif action == "P":
-        audioEngine.sfxPlay("ressources/sfx/openProfile.ogg", 1)
+        audio_engine.sfx_play("ressources/sfx/openProfile.ogg", 1)
         menus.profile(player)
 
     elif action == "M":
-        audioEngine.sfxPlay("ressources/sfx/selectOption.ogg", 1)
+        audio_engine.sfx_play("ressources/sfx/selectOption.ogg", 1)
         menuTrigger = input("\nVoulez vous vraiment aller sur le menu principal ? (O/N) ").upper()
         while menuTrigger != "O" and menuTrigger != "N":
-            audioEngine.sfxPlay("ressources/sfx/wrongChoice.ogg", 2)
+            audio_engine.sfx_play("ressources/sfx/wrongChoice.ogg", 2)
             menuTrigger = input("Incorrect. Voulez vous vraiment aller sur le menu principal ? (O/N) ").upper()
 
         if menuTrigger == "O":
-            audioEngine.sfxPlay("ressources/sfx/selectOption.ogg", 1)
+            audio_engine.sfx_play("ressources/sfx/selectOption.ogg", 1)
             print()
-            autoSaveDetect = parametres.autoSave(player)
+            autoSaveDetect = settings.auto_save(player)
             if autoSaveDetect == False:
                 saveToMenu = input("Voulez vous sauvegarder ? Vous allez perdre votre sauvegarde si vous n'avez pas sauvegarder. (O/N) ").upper()
                 while saveToMenu != "O" and saveToMenu != "N":
-                    audioEngine.sfxPlay("ressources/sfx/wrongChoice.ogg", 2)
+                    audio_engine.sfx_play("ressources/sfx/wrongChoice.ogg", 2)
                     saveToMenu = input("Incorrect. Voulez vous sauvegarder ? (O/N) ").upper()
 
                 if saveToMenu == "O":
-                    if saveSystem.save(player) == True:
+                    if save_system.save(player) == True:
                         print("Partie sauvegardé.")
                     else:
                         print("La sauvegarde a échoué.")
@@ -101,30 +105,30 @@ def partie(player):
             elif autoSaveDetect == None:
                 print("La sauvegarde automatique a échoué.")
 
-            misc.transitionMenu(2)
-            menus.mainMenu(player)
+            misc.menu_transition(2)
+            menus.main_menu(player)
         else:
-            audioEngine.sfxPlay("ressources/sfx/selectOption.ogg", 1)
+            audio_engine.sfx_play("ressources/sfx/selectOption.ogg", 1)
 
     elif action == "F":
-        audioEngine.sfxPlay("ressources/sfx/selectOption.ogg", 1)
+        audio_engine.sfx_play("ressources/sfx/selectOption.ogg", 1)
         fermerTrigger = input("Voulez vous vraiment quitter ? (O/N) ").upper()
         while fermerTrigger != "O" and fermerTrigger != "N":
-            audioEngine.sfxPlay("ressources/sfx/wrongChoice.ogg", 2)
+            audio_engine.sfx_play("ressources/sfx/wrongChoice.ogg", 2)
             fermerTrigger = input("Incorrect. Voulez vous vraiment quitter ? (O/N) ").upper()
 
         if fermerTrigger == "O":
             print()
-            autoSaveDetect = parametres.autoSave(player)
+            autoSaveDetect = settings.auto_save(player)
             if autoSaveDetect == False:
                 saveQuit = input("Voulez vous sauvegarder avant de quitter ? (O/N) ").upper()
                 while saveQuit != "O" and saveQuit != "N":
-                    audioEngine.sfxPlay("ressources/sfx/wrongChoice.ogg", 2)
+                    audio_engine.sfx_play("ressources/sfx/wrongChoice.ogg", 2)
                     saveQuit = input("Incorrect. Voulez vous sauvegarder ? (O/N) ").upper()
 
                 if saveQuit == "O":
-                    if saveSystem.save(player) == True:
-                        audioEngine.sfxPlay("ressources/sfx/saveQuitSuccess.ogg", 2)
+                    if save_system.save(player) == True:
+                        audio_engine.sfx_play("ressources/sfx/saveQuitSuccess.ogg", 2)
                         print("Partie sauvegardé.")
                     else:
                         print("La sauvegarde a échoué.")
@@ -132,24 +136,24 @@ def partie(player):
             elif autoSaveDetect == None:
                 print("La sauvegarde automatique a échoué.")
 
-            misc.fermerJeu()
+            misc.close_game()
         else:
-            audioEngine.sfxPlay("ressources/sfx/selectOption.ogg", 1)
+            audio_engine.sfx_play("ressources/sfx/selectOption.ogg", 1)
 
-    if player.parametres["Auto-save"] == "Activé":
-        saveSystem.save(player)
+    if player.settings["Auto-save"] == "Activé":
+        save_system.save(player)
 
 def collision(player, obj):
     if player.map[obj] == '[E]':
-        audioEngine.musicStop()
-        audioEngine.sfxPlay("ressources/sfx/battleStart.ogg", 1)
+        audio_engine.music_stop()
+        audio_engine.sfx_play("ressources/sfx/battleStart.ogg", 1)
 
         time.sleep(0.85)
 
-        player.statsEnnemi = [16, 8, 7, False, "Goomba"]
+        player.stats_enemy = [16, 8, 7, False, "Goomba"]
 
         if battle.fight(player, "ressources/mFight.mp3") == True:
-            parametres.autoSave(player)
+            settings.auto_save(player)
             time.sleep(2)
             return True
         else:
@@ -159,22 +163,32 @@ def collision(player, obj):
         if tower.tower(player) == True:
             player.map[obj] = '[R]'
 
+    elif player.map[obj] == '[S]':
+        print("SHOP (wip)")
+        time.sleep(2)
+
+    elif player.map[obj] == '[?]':
+        print("mystère  .. ..  (wip aussi)")
+        time.sleep(2)
+
     elif player.map[obj] == '[.]':
         return True
 
     else:
         return False
 
-def deplacer(player, positionPlayer, speed):
+def move(player, positionPlayer, speed):
     player.map[positionPlayer + speed] = '[J]'
     player.map[positionPlayer] = '[.]'
 
-def legende():
+def legend():
     print("\n\nLégende:\n"
-          "\033[1;32mJ = joueur\033[0m\n"
-          "\033[1;31mE = ennemi\033[0m\n"
-          "\033[1;34mT = tour\033[0m\n"
-          "\033[1;35mR = ruine (tour complétée)\033[0m\n"
-          "\033[1;1mM = mur\n\nContinuer...\033[0m", end="")
+          "\033[1;32mJ = joueur\n"
+          "\033[1;31mE = ennemi\n"
+          "\033[1;34mT = tour\n"
+          "\033[1;35mR = ruine (tour complétée)\n"
+          "\033[1;95mS = magasin\033[0m\n"
+          "\033[37m? = mystère...\033[0m\n"
+          "\033[1;1mM = mur\n\nContinuer ⭐\033[0m", end="")
     misc.dialogue()
     print()
