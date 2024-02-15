@@ -1,4 +1,4 @@
-""" Ce module comporte des fonctions pour sauvegarder et charger les données du joueur. """
+""" Ce module comporte des fonctions pour sauvegarder et charger la partie du joueur. """
 
 
 import time

@@ -1,4 +1,4 @@
-""" Module pour les effets de statut (états) des personnages. """
+""" Module pour les effets de statut (états) du joueur et de l'ennemi. """
 
 
 import random

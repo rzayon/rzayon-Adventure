@@ -1,4 +1,4 @@
-""" Module gérant tous les tutoriels du jeu et leur déclenchement. """
+""" Module gérant les différ¾nts tutoriels du jeu et leur déclenchement. """
 
 
 import random

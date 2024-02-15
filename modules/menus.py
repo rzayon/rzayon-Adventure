@@ -1,3 +1,6 @@
+""" Module contenant les différents menus du jeu ainsi que leurs options. """
+
+
 import sys
 import time
 import random
@@ -15,6 +18,11 @@ from modules import misc
 #Title Screen
 
 def title_screen(player, trigger):
+    """Lance l'écran titre du jeu.
+
+        Args:
+            trigger (bool): définis si le joueur vient de lancer le jeu ou non
+        """
 
     audio_engine.music_play("ressources/title.mp3")
 
@@ -402,7 +410,7 @@ def debug(player):
     elif debugChange == 3:
         player.stats_max[1] = player.stats[3]
 
-# Game Over
+# Game Over Screen
 
 def game_over_menu(player):
     audio_engine.sfx_play("ressources/sfx/saveAsk.ogg", 1)

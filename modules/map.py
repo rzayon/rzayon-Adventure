@@ -1,4 +1,4 @@
-"""Ce module est le module de la carte du jeu.
+"""Module de la carte du jeu.
 Il comporte des fonctions pour afficher la carte, déplacer le joueur et gérer les collisions."""
 
 

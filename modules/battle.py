@@ -1,4 +1,4 @@
-""" Module de combat du jeu. """
+""" Module gérant le système de combat du jeu. """
 
 import random
 import time
