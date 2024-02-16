@@ -1,3 +1,5 @@
+""" Module gérant la gestion des objets. """
+
 import random
 import time
 

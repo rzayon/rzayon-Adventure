@@ -198,8 +198,7 @@ def enemy_attack(player):
     if attaqueEnnemi <= 0:
         attaqueEnnemi = random.randint(4, player.stats_enemy[1] - 1)
 
-    player.stats[0] -= 90
-    #player.stats[0] -= attaqueEnnemi
+    player.stats[0] -= attaqueEnnemi
     misc.check_stats(player)
     return attaqueEnnemi
 

@@ -1,7 +1,10 @@
+""" Moteur audio du jeu.
+Contient des fonctions pour lancer une musique, un sfx, réduire le volume et arrêter avec ou sans fondu. """
+
+
 import pygame
 import os
 import time
-import inspect
 
 from engines import music_playing
 
@@ -64,4 +67,3 @@ def sfx_stop(channel):
         pygame.mixer.Channel(channel).stop()
 
 pygame.mixer.init()
-global music_playing

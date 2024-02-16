@@ -122,7 +122,7 @@ def main_menu(player):
 def new_game(player):
     player.player_name = "Player"
     player.stats = [25, 12, 10, 10, 0, 1, 0]
-    player.stats_max = [200, 10]
+    player.stats_max = [25, 10]
     player.objects = {"Champignon": [4, True, 10],
           "Champi Doré": [4, True, 25],
           "Champi Ultime": [4, True, 50],
@@ -142,7 +142,7 @@ def new_game(player):
     #player.objects = {}
     player.map = []
 
-    player.tutorial_triggers = {"fightFirstTime": True, "mapFirstTime": True}
+    player.tutorial_triggers = {"fightFirstTime": True, "mapFirstTime": True, "shopFirstTime": True}
 
     new_map(player, random.randint(7, 9), random.randint(12, 15))
 

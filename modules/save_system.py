@@ -12,7 +12,7 @@ def save(playerInfo):
     if len(playerInfo.stats) != 7 or len(playerInfo.stats_max) != 2:
         return False
 
-    saveData = str(playerInfo.player_name) + "\n" + ",".join(map(str, playerInfo.stats)) + '\n' + ",".join(map(str, playerInfo.stats_max)) + '\n' + str(playerInfo.y_movement) + '\n' + str(playerInfo.objects) + '\n' + str(playerInfo.settings) + '\n' + str(playerInfo.tutorial_triggers) + '\n'
+    saveData = str(playerInfo.player_name) + "\n" + ",".join(map(str, playerInfo.stats)) + '\n' + ",".join(map(str, playerInfo.stats_max)) + '\n' + str(playerInfo.y_movement) + '\n' + str(playerInfo.tower_floor) + '\n' + str(playerInfo.objects) + '\n' + str(playerInfo.settings) + '\n' + str(playerInfo.tutorial_triggers) + '\n'
 
     for e in str(playerInfo.map)[1:-1]:
         if e != "'":
@@ -23,14 +23,11 @@ def save(playerInfo):
     if not os.path.exists("saves"):
         os.makedirs("saves")
 
-    if os.path.exists("saves/saveTemp.txt"):
-        os.remove("saves/saveTemp.txt")
-
-    save = open("saves/saveTemp.txt", "a")
+    save = open("saves/saveTemp.txt", "w")
     save.write(saveData)
 
     save = open("saves/saveTemp.txt", "r")
-    if len(save.readlines()) != 9:
+    if len(save.readlines()) != 10:
         return False
 
     if os.path.exists("saves/save.sav"):
@@ -45,16 +42,17 @@ def load(playerInfo):
         shutil.copy('saves/save.sav', 'saves/saveTemp.txt')
         saveView = open('saves/saveTemp.txt', "r")
 
-        if len(saveView.readlines()) != 9:
+        if len(saveView.readlines()) != 10:
             misc.close_remove(saveView, 'saves/saveTemp.txt')
             return False
-
-        saveView = open('saves/saveTemp.txt', "r")
+        else:
+            saveView = open('saves/saveTemp.txt', "r")
 
         player_nom_temp = ""
         stats_temp = []
         stats_max_temp = []
         y_movement_temp = 0
+        tower_floor_temp = 0
         objects_temp = {}
         settings_temp = {}
         tutorial_triggers_temp = {}
@@ -66,7 +64,6 @@ def load(playerInfo):
         # Load Stats
         for stat in saveView.readline().strip().split(','):
             try:
-                int(stat)
                 stats_temp.append(int(stat))
             except ValueError:
                 misc.close_remove(saveView, 'saves/saveTemp.txt')
@@ -75,17 +72,21 @@ def load(playerInfo):
         # Load Max Stats
         for maxStats in saveView.readline().strip().split(','):
             try:
-                int(maxStats)
                 stats_max_temp.append(int(maxStats))
             except ValueError:
                 misc.close_remove(saveView, 'saves/saveTemp.txt')
                 return False
 
         # Load Déplacement Hauteur
-        y_movement_temp = saveView.readline().strip()
         try:
-            int(y_movement_temp)
-            y_movement_temp = int(y_movement_temp)
+            y_movement_temp = int(saveView.readline().strip())
+        except ValueError:
+            misc.close_remove(saveView, 'saves/saveTemp.txt')
+            return False
+
+        # Load Étage Tour
+        try:
+            tower_floor_temp = int(saveView.readline().strip())
         except ValueError:
             misc.close_remove(saveView, 'saves/saveTemp.txt')
             return False
@@ -123,7 +124,7 @@ def load(playerInfo):
             return 5
 
         # Load in player
-        if len(player_nom_temp) != 0 and len(stats_temp) == 6 and len(stats_max_temp) == 2 and y_movement_temp > 1 and len(settings_temp) == 2 and len(tutorial_triggers_temp) == 2:
+        if len(player_nom_temp) != 0 and len(stats_temp) == 7 and len(stats_max_temp) == 2 and y_movement_temp > 1 and tower_floor_temp >= 1 and len(settings_temp) == 2 and len(tutorial_triggers_temp) == 3:
             playerInfo.player_name = player_nom_temp
             playerInfo.stats = stats_temp
             playerInfo.stats_max = stats_max_temp
