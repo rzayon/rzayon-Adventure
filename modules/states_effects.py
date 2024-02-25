@@ -16,9 +16,20 @@ def display_effects(effetCible):
         listeEffets += "\n"
         return listeEffets
 
+def display_boosts(player_boosts):
+    if all(boost_round[1] == 0 for boost_round in player_boosts.values()):
+        return ""
+    else:
+        boost_list = ""
+        for boost in player_boosts.keys():
+            if player_boosts[boost][1] > 0:
+                boost_list += player_boosts[boost][2]
+
+        return boost_list
+
 def detect_state(player):
 
-    if player.states == {} and player.stats_enemy == {}:
+    if player.states == {} and all(boost_round[1] == 0 for boost_round in player.stats_boost.values()) and player.stats_enemy == {}:
         return False
 
     if player.stats[0] > 0 and player.states != {}:
@@ -26,6 +37,11 @@ def detect_state(player):
             if player.states[state][0] > 0:
                 player.stats[0] = state_effects(state, player.stats[0], parametres.affichePseudoCouleur(player))
                 player.states[state][0] = effect_duration_detect(player.states[state][0], state)
+
+    if all(boost_round[1] == 0 for boost_round in player.stats_boost.values()) == False:
+        for boost in player.stats_boost.keys():
+            if player.stats_boost[boost][1] > 0:
+                player.stats_boost[boost][1] = boost_duration_detect(player.stats_boost, boost)
 
     if player.stats_enemy[0] > 0 and player.states_enemy != {}:
         for state_enemy in player.states_enemy.keys():
@@ -60,8 +76,21 @@ def effect_duration_detect(tourEffet, state):
         print("\x1B[3mFin", state + ".\x1B[0m")
     return tourEffet
 
+def boost_duration_detect(player_boost, boost):
+
+    boost_counter = player_boost[boost][1] - 1
+    time.sleep(1)
+    if boost_counter == 0:
+        print("\x1B[3mFin", boost + " boost.\x1B[0m")
+        player_boost[boost][0] = 0
+    return boost_counter
+
+
+# Pour tout reset (tah mbappe)
 def reset_state(player):
     player.states = {}
-    player.stats_boost = {}
+
+    # oui c comme ça que je met ça par défaut pcq sinon c chiant jpp, fais cque tu veux avec pcq ya mieux mais turbo flemme pour l'instant
+    player.stats_boost = {"att": [0, 0, "⚔️"], "déf": [0, 0, "🛡️"]}
 
     player.states_enemy = {}

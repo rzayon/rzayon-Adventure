@@ -28,7 +28,7 @@ def fight(player, musicBattle):
 
         while fightActionDone == False:
             audio_engine.music_play(musicBattle)
-            print(f"{settings.display_name_color(player)}\n{misc.check_life_warning(player)} \033[1;95mPV\033[0m | {player.stats[3]} \033[1;33mPS\033[0m\n" +
+            print(f"{settings.display_name_color(player)} {states_effects.display_boosts(player.stats_boost)} \n{misc.check_life_warning(player)} \033[1;95mPV\033[0m | {player.stats[3]} \033[1;33mPS\033[0m\n" +
                 (states_effects.display_effects(player.states) if states_effects.display_effects(player.states) != False else ""))
             print("\033[1;1mVS\033[0m\n")
             print(f"\033[37m{player.stats_enemy[4]}\033[0m" + (" " + states_effects.display_effects(player.states_enemy) if states_effects.display_effects(player.states_enemy) != False else " ") + f"\n\033[1;95mPV:\033[0m {player.stats_enemy[0]}\n\033[1;31mAtt:\033[0m {player.stats_enemy[1]}\n")
@@ -174,6 +174,7 @@ def flee():
         audio_engine.sfx_play("ressources/sfx/leaveBattle.ogg", 2)
         print("\n\033[3mVous avez fuis...\033[0m")
         audio_engine.sfx_stop(3)
+        states_effects.reset_state(player)
         misc.menu_transition(3)
         return True
     else:

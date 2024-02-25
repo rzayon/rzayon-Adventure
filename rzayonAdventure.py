@@ -7,7 +7,7 @@ class Game:
 
     def __init__(self):
         self.game_name = "\033[1;33m\033[4mrzayon's Adventure\033[0m"
-        self.game_version = "0.608"
+        self.game_version = "0.6085"
 
         self.player_name = ""
 

@@ -123,6 +123,7 @@ def new_game(player):
     player.player_name = "Player"
     player.stats = [25, 12, 10, 10, 0, 1, 0]
     player.stats_max = [25, 10]
+    player.stats_boost = {"att": [0, 0, "⚔️"], "déf": [0, 0, "🛡️"]}
     player.objects = {"Champignon": [4, True, 10],
           "Champi Doré": [4, True, 25],
           "Champi Ultime": [4, True, 50],
@@ -134,11 +135,12 @@ def new_game(player):
           "Fleur Carnivore": [3, False, 20],
           "Grosse pierre": [7, False, 5],
 
-          "Potion du Dragon": [3, False, 15],
-          "Potion de Toute Puissance": [3, False, 30],
+          "Potion du Dragon": [3, False, 15, "att"],
+          "Potion de Toute Puissance": [3, False, 30, "att"],
 
-          "Bouclier naturel": [2, False, 10],
-          "Bouclier Max": [2, False, 25]}
+          "Bouclier naturel": [2, False, 10, "déf"],
+          "Bouclier Max": [2, False, 25, "déf"]}
+
     #player.objects = {}
     player.map = []
 

@@ -63,6 +63,18 @@ def objets_effects(player, objet, inFight):
 
         return True
 
+    # Objets Boost
+    elif objetCheck.startswith("potion") or objetCheck.startswith("bouclier"):
+        player.stats_boost[player.objects[objet][3]][0] = player.objects[objet][2]
+        player.stats_boost[player.objects[objet][3]][1] = 4
+
+        if objetCheck.startswith("potion"):
+            print("\n\033[1;32m\033[1;1m\033[1;3mAtt ++\033[0m\n")
+        else:
+            print("\n\033[1;32m\033[1;1m\033[1;3mDéf ++\033[0m\n")
+
+        return True
+
     else:
         print("debug, ca existe pas, aucun objet bg")
 
