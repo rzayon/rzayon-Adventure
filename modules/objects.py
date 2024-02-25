@@ -5,6 +5,7 @@ import time
 
 from engines import audio_engine
 
+from modules import objects_list
 from modules import misc
 
 def delete_item(player, objetUsed):
@@ -30,23 +31,37 @@ def objets_effects(player, objet, inFight):
     if objetCheck.startswith("champi"):
         if player.stats[0] != player.stats_max[0]:
             player.stats[0] += player.objects[objet][2]
-            if objetCheck == "champi max":
+            if objetCheck == "champi prodige":
                 audio_engine.sfx_play("ressources/sfx/fullRegen.ogg", 2)
-                print("Vous avez regagné \033[1;32mtout vos PV\033[0m.")
+                print("\nVous avez regagné \033[1;32mtout vos PV\033[0m.")
             else:
                 audio_engine.sfx_play("ressources/sfx/champiRegen.ogg", 2)
-                print(f"PV \033[1;32m+ {player.objects[objet][2]}\033[0m")
+                print(f"\nPV \033[1;32m+ {player.objects[objet][2]}\033[0m")
             misc.check_stats(player)
             return True
         else:
             print("Vous êtes déjà au maximum de PV.")
 
     # Objets Attack
-    elif objetCheck == "fleur carnovore" or objetCheck == "pierre":
+    elif objetCheck == "fleur carnivore" or objetCheck == "grosse pierre":
         player.stats_enemy[0] -= player.objects[objet][2]
         print(f"Votre \033[1;33m{objet}\033[0m a infligé \033[1;31m{player.objects[objet][2]}\033[0m de dégats à l'ennemi.")
-    elif objetCheck == "pierre":
-        print("pierre")
+        time.sleep(1.5)
+
+        if player.stats_enemy[0] > 0:
+            state_trigger = random.random()
+
+            if objetCheck == "fleur carnivore" and state_trigger < 0.95:
+                player.states_enemy["poison"] = [random.randint(2, 5), "🧪"]
+                print("L'ennemi est empoisonné.")
+                time.sleep(2)
+
+            elif objetCheck == "grosse pierre" and state_trigger < 0.92:
+                player.states_enemy["étourdis"] = [random.randint(2, 3), "💫"]
+                print("L'ennemi est étourdis.")
+                time.sleep(2)
+
+        return True
 
     else:
         print("debug, ca existe pas, aucun objet bg")
@@ -63,3 +78,9 @@ def totem_regen(player):
 
     else:
         return False
+
+def objects_infos(player):
+    if player.objects != {}:
+        print()
+        for object in player.objects.keys():
+            print(f"{object}: \033[1;33m{objects_list.objects_info[object]}\033[0m")

@@ -35,22 +35,22 @@ def detect_state(player):
 
 def state_effects(state, vieCible, nomCible):
     if state == "feu":
-        feuDegat = random.randint(4, 6)
+        feuDegat = random.randint(5, 8)
         vieCible -= feuDegat
-        print(nomCible, "brulé. -", feuDegat, "dégats.")
-        return vieCible
+        print(nomCible, "brulé. \033[1;31m-", feuDegat, "dégats\033[0m")
 
     elif state == "poison":
         poisonDegat = random.randint(8, 10)
         vieCible -= poisonDegat
-        print(nomCible, "empoisonné. -", poisonDegat, "dégats.")
-        return vieCible
+        print(nomCible, "empoisonné. \033[1;31m-", poisonDegat, "dégats\033[0m")
 
     elif state == "étourdis":
-        etourdisDegat = random.randint(6, 12)
+        etourdisDegat = random.randint(4, 6)
         vieCible -= etourdisDegat
-        print(nomCible, "étourdis. -", etourdisDegat, "dégats. (GG)")
-        return vieCible
+        print(nomCible, "étourdis. \033[1;31m-", etourdisDegat, "dégats.\033[0m")
+
+    time.sleep(1)
+    return vieCible
 
 def effect_duration_detect(tourEffet, state):
 
@@ -62,4 +62,6 @@ def effect_duration_detect(tourEffet, state):
 
 def reset_state(player):
     player.states = {}
+    player.stats_boost = {}
+
     player.states_enemy = {}

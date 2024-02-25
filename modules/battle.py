@@ -17,6 +17,7 @@ from modules import misc
 
 def fight(player, musicBattle):
 
+    states_effects.reset_state(player)
     vieEnnemiTempo = player.stats_enemy[0]
 
     print()
@@ -30,7 +31,7 @@ def fight(player, musicBattle):
             print(f"{settings.display_name_color(player)}\n{misc.check_life_warning(player)} \033[1;95mPV\033[0m | {player.stats[3]} \033[1;33mPS\033[0m\n" +
                 (states_effects.display_effects(player.states) if states_effects.display_effects(player.states) != False else ""))
             print("\033[1;1mVS\033[0m\n")
-            print(f"\033[37m{player.stats_enemy[4]}\033[0m" + (states_effects.display_effects(player.states_enemy) if states_effects.display_effects(player.states_enemy) != False else " ") + f"\n\033[1;95mPV:\033[0m {player.stats_enemy[0]}\n\033[1;31mAtt:\033[0m {player.stats_enemy[1]}\n")
+            print(f"\033[37m{player.stats_enemy[4]}\033[0m" + (" " + states_effects.display_effects(player.states_enemy) if states_effects.display_effects(player.states_enemy) != False else " ") + f"\n\033[1;95mPV:\033[0m {player.stats_enemy[0]}\n\033[1;31mAtt:\033[0m {player.stats_enemy[1]}\n")
 
             low_hp_detect(player)
             attaqueTrigger = input("\033[1;31mAttaquer (A)\033[0m / \033[1;32mObjets (O)\033[0m / \033[1;33mSpécial (S) [WIP]\033[0m / \033[1;36mFuir (F)\033[0m / \033[37mNe rien faire (R)\033[0m ").upper()

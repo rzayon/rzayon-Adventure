@@ -126,13 +126,13 @@ def new_game(player):
     player.objects = {"Champignon": [4, True, 10],
           "Champi Doré": [4, True, 25],
           "Champi Ultime": [4, True, 50],
-          "Champi Max": [4, True, player.stats_max[0]],
+          "Champi Prodige": [4, True, player.stats_max[0]],
 
           "Totem": [2, None],
           "Totem Gardien": [2, None],
 
-          "Fleur Carnovore": [3, False, 20],
-          "Gross pierre": [2, False, 3],
+          "Fleur Carnivore": [3, False, 20],
+          "Grosse pierre": [7, False, 5],
 
           "Potion du Dragon": [3, False, 15],
           "Potion de Toute Puissance": [3, False, 30],
@@ -345,9 +345,9 @@ def objects_menu(player, inFight):
                 else:
                     print(f"{objet} \033[1;31mx{player.objects[objet][0]}\033[0m")
 
-        objetAction = input("\nUtiliser (U) / Quitter (Q) ").upper()
-        while objetAction != "U" and objetAction != "Q":
-            objetAction = input("Utiliser (U) / Quitter (Q) ").upper()
+        objetAction = input("\nUtiliser (U) / Infos (I) / Quitter (Q) ").upper()
+        while objetAction != "U" and objetAction != "I" and objetAction != "Q":
+            objetAction = input("Utiliser (U) / Infos (I) / Quitter (Q) ").upper()
 
         if objetAction == "U" and player.objects != {}:
             objetChoose = input("Choisissez un objet: ").lower()
@@ -367,6 +367,11 @@ def objects_menu(player, inFight):
                 return True
             else:
                 time.sleep(2)
+
+        elif objetAction == "I":
+            objects.objects_infos(player)
+            print("\n\033[1;1mAppuyez pour continuer ⭐\033[0m")
+            misc.dialogue()
 
         elif objetAction == "Q":
             return False
