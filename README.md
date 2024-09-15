@@ -1,6 +1,11 @@
 # rzayon-Adventure
 started on the 14th january 2024
 
+
+And, as of september 2024, probably dead project now, this has been a great and fun project to do :)
+
+
+
 a little RPG game that i made in terminal python (in french). It's VERY inspired by paper mario and mario luigi RPGs (almost all songs/sfx are from theses games).
 I'm making it little by little even if it's bad (my code is atrocious btw)
 
